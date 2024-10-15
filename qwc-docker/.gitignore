@@ -1,0 +1,16 @@
+.env
+volumes/databases
+volumes/gw_logs
+volumes/mapproxy/**/tiles
+volumes/mapproxy/**/*.time
+volumes/images/*
+volumes/config/**/adminGuiConfig.json
+volumes/config/**/dbAuthConfig.json
+volumes/config/**/elevationConfig.json
+volumes/config/**/index.html
+volumes/config/**/mapViewerConfig.json
+volumes/config/**/ogcConfig.json
+volumes/config/**/permalinkConfig.json
+volumes/config/**/permissions.json
+volumes/config-in/**/*.bak*
+volumes/db

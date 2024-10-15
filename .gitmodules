@@ -1,0 +1,9 @@
+[submodule "qwc2-giswater-services"]
+	path = qwc2-giswater-services
+	url = https://github.com/bgeo-gis/qwc2-giswater-services
+[submodule "qwc-qgis-server"]
+	path = qwc-qgis-server
+	url = https://github.com/bgeo-gis/qwc-qgis-server.git
+[submodule "mapproxy-service"]
+	path = mapproxy-service
+	url = https://github.com/bgeo-gis/mapproxy-service.git

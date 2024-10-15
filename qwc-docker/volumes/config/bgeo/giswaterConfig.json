@@ -1,0 +1,41 @@
+{
+    "service": "giswater",
+    "config": {
+        "db_url_read": "postgresql:///?service=qwc_geodb_bgeo",
+        "db_url_write": "postgresql:///?service=qwc_geodb_bgeo",
+        "images_path": "/images/bgeo/img/",
+        "images_url": "https://localhost:8088/bgeo/images/",
+        "profile_svg_path": "/images/bgeo/profile/",
+        "themes": {
+            "UD": {
+                "schema": "ud_36_013",
+                "editable": true,
+                "layers": {
+                    "Arc": "v_edit_arc",
+                    "Node": "v_edit_node",
+                    "Link": "v_edit_link",
+                    "Connec": "v_edit_connec",
+                    "Gully": "v_edit_gully"
+                }
+            },
+            "WS" : {
+                "schema": "ws_36_013",
+                "editable": true,
+                "layers": {
+                    "Exploitation": "v_edit_exploitation",
+                    "Arc": "v_edit_arc",
+                    "Node": "v_edit_node",
+                    "Connec": "v_edit_connec",
+                    "Link": "v_edit_link",
+                    "connec_polygon" : "ve_pol_connec",
+                    "node_polygon": "ve_pol_node",
+                    "Dimensioning": "v_edit_dimensions",
+                    "Municipality": "ext_municipality",
+                    "Streetaxis": "v_ext_streetaxis",
+                    "Plot": "v_ext_plot"
+                },
+                "mincut_layer": "Mincut"
+            }
+        }
+    }
+}
