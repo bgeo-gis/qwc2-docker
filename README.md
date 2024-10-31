@@ -197,10 +197,6 @@ With Docker compose we can run all the application's services configured in the 
     curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo gpg --dearmor -o /usr/share/keyrings/yarn-keyring.gpg
     ~~~~
 
-- Add yarn repository
-    ~~~~
-    curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo gpg --dearmor -o /usr/share/keyrings/yarn-keyring.gpg
-    ~~~~
 - Update and install yarn
     ~~~~
     sudo apt update
@@ -220,11 +216,18 @@ With Docker compose we can run all the application's services configured in the 
     ~~~~
 
 - Installation:
-  - npm
+
+  - Navigate to `qwc2-giswater-app` and run the following command to install `qwc2` and `qwc2-giswater` dependencies
     ~~~~
     yarn install
     ~~~~
 - Change ``deploy_prod.sh`` and ``deploy_dev.sh`` to point to the correct `qwc2-docker` path if necessary.
+    ~~~~
+    yarn run prod
+    rm -rf /qwc2-docker/qwc-docker/volumes/qwc2/*
+    cp -R /qwc2-giswater-app/prod/* /qwc2-docker/qwc-docker/volumes/qwc2/
+    chown -R 33:33 /qwc2-docker/qwc-docker/volumes/qwc2/assets
+    ~~~~
 
 - Deploy to test
     ~~~~
