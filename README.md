@@ -329,9 +329,7 @@ Note: Every tenant must have a separate config-db and config-db-migrate
 
 ## Finish configuration
 
-- Change the references from `bgeo` to `<tenant>` in the `tenantConfig.json` file
-
-- In the `tenantConfig.json` file changhe the `config_db_url` references. 
+- Change the references from `bgeo` to `<tenant>` in the `tenantConfig.json` file, including the `config_db_url` references. 
 
     ~~~~
     ...
