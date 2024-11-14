@@ -310,7 +310,7 @@ QWC2 offers multi-tenancy, in this repository there is example configuration for
      environment:
        POSTGRES_PASSWORD: '' # TODO: Set your postgres password here!
      volumes:
-      - ./volumes/db/bgeo:/var/lib/postgresql/docker
+      - ./volumes/db/<tenant>:/var/lib/postgresql/docker
      #ports:
      #- "127.0.0.1:5439:5432"
      healthcheck:
@@ -331,7 +331,7 @@ Note: Every tenant must have a separate config-db and config-db-migrate
 
 - Change the references from `bgeo` to `<tenant>` in the `tenantConfig.json` file
 
-- In the `tenantConfig.json` file changhe the `config_db_url` references.
+- In the `tenantConfig.json` file changhe the `config_db_url` references. 
 
     ~~~~
     ...
