@@ -133,7 +133,6 @@
         "name": "TopBar",
         "cfg": {
           "menuItems": [
-            {"key": "Portal", "icon": "themes"},
             {"key": "ThemeSwitcher", "icon": "themes", "shortcut": "alt+shift+t"},
             {"key": "LayerTree", "icon": "layers", "shortcut": "alt+shift+l"},
             {"key": "MapLegend", "icon": "list-alt"},
@@ -548,28 +547,6 @@
           "url": "https://qwc.dev.bgeo.es/ncwms/wms"
         }
       },
-      {
-        "name": "Portal",
-          "cfg": {
-          "logo": "logo.svg",
-          "topBarText": "QWC2 Demo Portal",
-          "showMenuOnStartup": false,
-          "keepMenuOpen": false,
-          "bottomBarLinks": [
-              {"href": "http://www.example.com", "label": "Example.com", "target": "iframe"},
-              {"href": "http://www.test.com", "label": "Test.com"}
-          ],
-          "menuItems": [
-              {"key": "Help", "icon": "info", "url": "http://example.com"},
-              {"key": "ExternalLink", "icon": "link", "url": "http://example.com?extent=$e$"},
-              {"key": "IframeLink", "icon": "link", "url": "http://example.com", "target": "iframe"},
-              {"key": "Tools", "icon": "tools", "subitems": [
-                {"key": "ExternalLink2", "icon": "link", "url": "http://example.com?extent=$e$"},
-                {"key": "ExternalLink3", "icon": "link", "url": "http://example.com?extent=$e$"}
-              ]}
-          ]
-        }
-      }
     ],
     "mobile": [
 	    {
