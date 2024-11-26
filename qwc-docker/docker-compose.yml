@@ -42,7 +42,7 @@ services:
       # - /media/qwc2/qgis-projects:/data:rw  <- Example for mounting /data in external folder
 
   qwc-config-service:
-    image: sourcepole/qwc-config-generator:v2024.5-lts-noqgis
+    image: sourcepole/qwc-config-generator:v2024.11.18
     environment:
       <<: *qwc-service-variables
       INPUT_CONFIG_PATH: '/srv/qwc_service/config-in'
@@ -59,7 +59,7 @@ services:
       - ./pg_service.conf:/srv/pg_service.conf:ro
 
   qwc-ogc-service:
-    image: sourcepole/qwc-ogc-service:v2024.07.04
+    image: sourcepole/qwc-ogc-service:v2024.11.18
     healthcheck:
       test: wget --no-verbose --tries=1 --spider http://localhost:9090/healthz || exit 1
       interval: 20s
@@ -74,7 +74,7 @@ services:
 
   qwc-map-viewer:
     # Use with oun deployment if QWC2 App in volumes/qwc2
-    image: sourcepole/qwc-map-viewer-base:v2024.07.25
+    image: sourcepole/qwc-map-viewer-base:v2024.11.18
     healthcheck:
       test: wget --no-verbose --tries=1 --spider http://localhost:9090/healthz || exit 1
       interval: 20s
@@ -126,7 +126,7 @@ services:
       - ./volumes/gw_logs:/gw_logs:ro
 
   qwc-auth-service:
-    image: sourcepole/qwc-db-auth:v2024.4-lts
+    image: sourcepole/qwc-db-auth:v2024.11.18
     environment:
       <<: *qwc-service-variables
       SERVICE_MOUNTPOINT: '/auth'
@@ -159,7 +159,7 @@ services:
 
   qwc-data-service:
     # build: ../qwc-data-service
-    image: sourcepole/qwc-data-service:v2024.07.04
+    image: sourcepole/qwc-data-service:v2024.11.18
     environment:
       <<: *qwc-service-variables
       SERVICE_MOUNTPOINT: '/data'
@@ -173,7 +173,7 @@ services:
     #   - "127.0.0.1:5012:9090"
 
   qwc-elevation-service:
-    image: sourcepole/qwc-elevation-service:v2024.2-lts
+    image: sourcepole/qwc-elevation-service:v2024.11.18
     environment:
       <<: *qwc-service-variables
       SERVICE_MOUNTPOINT: '/elevation'
@@ -184,7 +184,7 @@ services:
     #   - "127.0.0.1:5002:9090"
 
   qwc-permalink-service:
-    image: sourcepole/qwc-permalink-service:v2024.3-lts
+    image: sourcepole/qwc-permalink-service:v2024.11.18
     environment:
       <<: *qwc-service-variables
       SERVICE_MOUNTPOINT: '/api/v1/permalink'
@@ -196,7 +196,7 @@ services:
 
 
   qwc-feature-info-service:
-    image: sourcepole/qwc-feature-info-service:v2024.07.04
+    image: sourcepole/qwc-feature-info-service:v2024.11.18
     environment:
       <<: *qwc-service-variables
       SERVICE_MOUNTPOINT: '/api/v1/featureinfo'
