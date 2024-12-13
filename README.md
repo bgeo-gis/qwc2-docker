@@ -194,7 +194,11 @@ With Docker compose we can run all the application's services configured in the 
     ~~~~
 - Import Yarn GPG key
     ~~~~
-    curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo gpg --dearmor -o /usr/share/keyrings/yarn-keyring.gpg
+    # GPG KEY
+    curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+    
+    # Repository
+    echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
     ~~~~
 
 - Update and install yarn
