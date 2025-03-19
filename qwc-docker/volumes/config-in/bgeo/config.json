@@ -169,7 +169,7 @@
             {"key": "Help", "icon": "info", "shortcut": "alt+shift+h"},
             {"key": "ExternalLink", "icon": "link", "url": "https://qgis.org/", "target": "iframe"},
             {"key": "Settings", "icon": "cog"},
-            {"key": "Login", "icon": "login"}
+            {"key": "Authentication", "mode": "Login", "icon": "login"}
           ],
           "searchOptions": {
             "hideResultLabels": false,
