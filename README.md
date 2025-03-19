@@ -196,7 +196,7 @@ With Docker compose we can run all the application's services configured in the 
     ~~~~
     # GPG KEY
     curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
-    
+
     # Repository
     echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
     ~~~~
@@ -333,7 +333,7 @@ Note: Every tenant must have a separate config-db and config-db-migrate
 
 ## Finish configuration
 
-- Change the references from `bgeo` to `<tenant>` in the `tenantConfig.json` file, including the `config_db_url` references. 
+- Change the references from `bgeo` to `<tenant>` in the `tenantConfig.json` file, including the `config_db_url` references.
 
     ~~~~
     ...
@@ -439,3 +439,176 @@ Create a new theme or themes and finish the configuration to start working with 
 - Change admin password.
 
     You should be able to acces the admin backoffice at `https://<host>/<new_tenant>/admin`. The default user and password are `admin:admin`. You will be asked to change the default password when logging in for the first time. Please change the password for a secure one.
+
+# Setting Up PostgreSQL Replication
+
+For big databases with many concurrent users, we recommend setting up Postgres replication in the QWC2 Server. This means setting up a local Postgres installation in the QWC2 server as a standby server to the master production DB.
+
+
+## Network Setup
+
+Create a network for the servers: master and replica.
+
+### PostgreSQL Master Name and IP Address:
+**Master** - `PGMaster` (`10.X.X.2`)
+
+### PostgreSQL Replica Name and IP Address:
+**Replica** - `PGReplica` (`10.X.X.8`)
+
+Both Master and Replica servers must have **the same version of PostgreSQL** installed. In this documentation we will use PostgreSQL 14 as an example.
+
+---
+## Step 1: Configurations on MASTER SERVER
+
+1. Configure PostgreSQL to listen for connections from all IP addresses. Edit `postgresql.conf`:
+
+    ```ini
+    listen_addresses = '*'
+    ```
+
+2. Connect to PostgreSQL on the master server and create a replication user:
+
+    ```sql
+    CREATE USER replicator WITH REPLICATION ENCRYPTED PASSWORD 'yourSecurePassword';
+    ```
+
+3. Modify the `pg_hba.conf` file located at `/etc/postgresql/14/main/` to allow replication connections:
+
+    ```ini
+    host    replication     replicator      <replica_public_ip>/32     md5
+    ```
+    or
+    ```ini
+    host    replication    replicator    <replica_public_ip>/32    scram-sha-256
+    ```
+
+4. Restart PostgreSQL on the master server:
+
+    ```sh
+    sudo systemctl restart postgresql
+    ```
+
+---
+## Step 2: Configurations on SLAVE (Standby) SERVER
+
+1. Stop PostgreSQL on the replica server:
+
+    ```sh
+    sudo systemctl stop postgresql
+    ```
+
+2. Switch to the `postgres` user and take a backup of the main directory:
+
+    ```sh
+    su - postgres
+    cp -R /var/lib/postgresql/14/main/ /var/lib/postgresql/14/main_old/
+    ```
+
+3. Remove the existing main directory contents:
+
+    ```sh
+    rm -rf /var/lib/postgresql/14/main/
+    ```
+
+4. Take a base backup from the master using `pg_basebackup`:
+
+    ```sh
+    pg_basebackup -h <master_ip> -p 5432 -D /var/lib/postgresql/14/main/ -U replicator -P -v -R -X stream -C -S <replica_name>
+    ```
+
+    Provide the password for the `replicator` user when prompted.
+
+5. Assign the correct permissions to the new main directory:
+
+    ```sh
+    chown -R postgres:postgres /var/lib/postgresql/14/main
+    ```
+
+6. Verify that `standby.signal` was created:
+
+    ```sh
+    ls -ltrh /var/lib/postgresql/14/main/
+    ```
+
+7. On the master server, check if the replication slot exists:
+
+    ```sql
+    SELECT * FROM pg_replication_slots;
+    ```
+
+---
+## Step 3: TESTING
+
+1. Start PostgreSQL on the replica (standby) server:
+
+    ```sh
+    systemctl start postgresql
+    ```
+
+2. Try creating a database on the replica. It should throw an error since it is read-only:
+
+    ```sql
+    CREATE DATABASE replica_test;
+    ```
+
+3. Check the status of the standby server:
+
+    ```sql
+    SELECT * FROM pg_stat_wal_receiver;
+    ```
+
+4. Verify the replication type (synchronous or asynchronous) on the master server:
+
+    ```sql
+    SELECT * FROM pg_stat_replication;
+    ```
+
+5. Test replication by creating a test database on the master server:
+
+    ```sql
+    CREATE DATABASE test_db;
+    ```
+
+6. Verify that the database was replicated to the replica:
+
+    ```sql
+    SELECT datname FROM pg_database;
+    ```
+
+Now, the PostgreSQL replication setup is complete!
+
+
+## Giswater plugin configuration in QWC2 with PostgreSQL Relpication
+
+The Giswater plugin for QWC2 supports multiple database connections, allowing read-only transactions to be directed to a PostgreSQL replication standby server, while write operations are sent to the master server. This setup optimizes performance by offloading 'get' functions to the standby server while ensuring 'set' functions are executed on the primary database.
+
+First, create two separate pg_service configurations in `qwc-docker/pg_service.conf`. One for the local replica Postgres and another for the master Postgres.
+
+```conf
+[geodb_test_replica]
+host=127.0.0.1
+port=5432
+dbname=postgres
+user=example
+password=example
+
+[geodb_test_master]
+host=host
+port=5432
+dbname=postgres
+user=example
+password=example
+```
+
+Then set `db_url_read` and `db_url_write` accordingly in the plugin configuration file in `qwc-docker/volumes/config/<tenant>/giswaterConfig.json`:
+
+```json
+"service": "giswater",
+    "config": {
+        "db_url_read": "postgresql:///?service=geodb_test_replica",
+        "db_url_write": "postgresql:///?service=geodb_test_master",
+        ...
+
+```
+
+
