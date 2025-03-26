@@ -60,9 +60,6 @@ services:
 
   qwc-ogc-service:
     image: sourcepole/qwc-ogc-service:v2025.1-lts
-    healthcheck:
-      test: wget --no-verbose --tries=1 --spider http://localhost:9090/healthz || exit 1
-      interval: 20s
     environment:
       <<: *qwc-service-variables
       SERVICE_MOUNTPOINT: '/ows'
@@ -75,9 +72,6 @@ services:
   qwc-map-viewer:
     # Use with oun deployment if QWC2 App in volumes/qwc2
     image: sourcepole/qwc-map-viewer-base:v2025.5-lts
-    healthcheck:
-      test: wget --no-verbose --tries=1 --spider http://localhost:9090/healthz || exit 1
-      interval: 20s
     environment:
       <<: *qwc-service-variables
       SERVICE_MOUNTPOINT: '/'

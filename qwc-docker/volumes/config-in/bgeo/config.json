@@ -523,7 +523,7 @@
         }
       },
       {
-        "name": "GwProfileGraph",
+        "name": "GwProfileGraphV2",
         "cfg": {
           "heighProfilePrecision": 0
         }
@@ -546,7 +546,7 @@
         "cfg": {
           "url": "https://qwc.dev.bgeo.es/ncwms/wms"
         }
-      },
+      }
     ],
     "mobile": [
 	    {
