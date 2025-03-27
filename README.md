@@ -482,10 +482,10 @@ Both Master and Replica servers must have **the same version of PostgreSQL** ins
     host    replication    replicator    <replica_public_ip>/32    scram-sha-256
     ```
 
-4. Restart PostgreSQL on the master server:
+4. Reload PostgreSQL on the master server:
 
     ```sh
-    sudo systemctl restart postgresql
+    sudo systemctl reload postgresql
     ```
 
 ---
